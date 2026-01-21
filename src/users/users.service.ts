@@ -1,3 +1,4 @@
+
 export class UserService{
     users: {id:number,name: String , age:number ,gender: string , isMarried: boolean}[] = [
     {id:1,name:'john', age: 32 , gender:'male' , isMarried:true  },

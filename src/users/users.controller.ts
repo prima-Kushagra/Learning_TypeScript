@@ -1,29 +1,27 @@
-import { Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Controller, Get, Param, Post, Query , ParseIntPipe, DefaultValuePipe } from "@nestjs/common";
 import { UserService } from "./users.service";
 
-// http://localhost:3000/users/
+// http://localhost:3000/users/101
 
 @Controller('users')
 export class UsersControllers{
+   constructor(private readonly userService: UserService) {}
 @Get()
-     getUsers(@Query() queryString: any){
-        const userService = new UserService();
-        if(queryString.gender){
-            return userService.getAllUsers().filter(u => u.gender ===queryString.gender)
-        }
-        return userService.getAllUsers();
+     getUsers(@Query('limit' , new DefaultValuePipe(10),ParseIntPipe ) limit: number , 
+     @Query('page' ,new DefaultValuePipe(1),  ParseIntPipe ) page : number){
+        console.log(limit , page)
+        return this.userService.getAllUsers();
      }
 @Get(':id')
-     getUserById(@Param('id') id :any){
-        const userService = new UserService();
-        return userService.getUserById(+id);
-      
+     getUserById(@Param('id' , ParseIntPipe) id: any){
+      console.log(typeof id , id)
+        return this.userService.getUserById(id);
+        
      }
 @Post()
      createUser(){
         const user = {id:3 , name: 'Marry' , age:23 , gender:"Female" , isMarried : false }
-        const userSer = new UserService();
-        userSer.createUser(user);
+        this.userService.createUser(user);
         return  'A new User Has been created';
      }
 }
