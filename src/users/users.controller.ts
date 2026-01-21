@@ -8,7 +8,7 @@ import { UpdateUserDTO } from "./dtos/update-user.dto";
 
 @Controller('users')
 export class UsersControllers{
-   constructor(private readonly userService: UserService) {}
+   constructor(private  userService: UserService)  {} // 3rd step for injectable
 @Get()
 getUsers(
   @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,

@@ -4,7 +4,7 @@ import { UserService } from "./users.service";
 
 @Module({
     controllers : [UsersControllers],
-    providers : [UserService]
+    providers : [UserService] // for injectatblr 2nd step
 })
 export class UsersModule{
 
