@@ -21,7 +21,7 @@ export class UsersControllers{
      }
 @Post()
      
-        createUser(@Body(new ValidationPipe()) user: CreateUserDTO){
+        createUser(@Body() user: CreateUserDTO){
         //this.userService.createUser(user);
         return  'A new User Has been created';
      }
