@@ -23,6 +23,7 @@ export class UsersControllers{
      
         createUser(@Body() user: CreateUserDTO){
         //this.userService.createUser(user);
+        console.log(user instanceof CreateUserDTO );
         return  'A new User Has been created';
      }
 }
