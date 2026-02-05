@@ -1,7 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn} from "typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
-import { CreateDateColumn } from "typeorm/browser";
-import { DeleteDateColumn } from "typeorm/browser";
+
     @Entity()
     export class User{
     @PrimaryGeneratedColumn()

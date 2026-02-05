@@ -8,7 +8,7 @@ export class Profile{
 
 @Column({
         type: 'varchar',
-        nullable: false,
+        nullable: true,
         length: 100
     })
     firstName: string;
@@ -16,7 +16,7 @@ export class Profile{
     @Column(
         {
     type: 'varchar',
-    nullable: false,
+    nullable: true,
     length: 100
         }
     )
@@ -39,4 +39,7 @@ export class Profile{
     nullable: true
 })
 Bio: string;
+
+@Column({type: 'text' ,nullable: true})
+profileImage?: string
 }
