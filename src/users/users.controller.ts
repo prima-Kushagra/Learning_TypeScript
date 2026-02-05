@@ -9,33 +9,18 @@ import { UpdateUserDTO } from "./dtos/update-user.dto";
 @Controller('users')
 export class UsersControllers{
    constructor(private  userService: UserService)  {} // 3rd step for injectable
+
+
 @Get()
-getUsers(
-  @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  @Param('isMarried') param: GetUserParamDto
-) {
-  console.log(param);
+getAllUsers(){
   return this.userService.getAllUsers();
 }
 
-@Get(':id')
-     getUserById(@Param('id' , ParseIntPipe) id: any){
-      console.log(typeof id , id)
-        return this.userService.getUserById(id);
-        
-     }
+
 @Post()
      
         createUser(@Body() user: CreateUserDTO){
-        //this.userService.createUser(user);
-        console.log(user instanceof CreateUserDTO );
-        return  'A new User Has been created';
+        this.userService.createUser(user);
      }
 
-@Patch()
-      updateUser(@Body() body : UpdateUserDTO){
-        console.log(body)
-        return `User updated successfully`
-      }
 }
