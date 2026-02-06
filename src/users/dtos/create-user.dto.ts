@@ -1,4 +1,5 @@
 import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { LikeDTO } from "src/likes/dto/like-user.dto";
 import { CreateProfileDto } from "src/profile/dto/create-profile.dto";
 
 export class CreateUserDTO{
@@ -19,5 +20,8 @@ export class CreateUserDTO{
    
    @IsOptional()
    profile: CreateProfileDto;
+
+   @IsOptional()
+   like: LikeDTO;
    
 }

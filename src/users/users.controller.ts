@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Query , ParseIntPipe,ParseBoolPipe, DefaultValuePipe, ValidationPipe, Patch } from "@nestjs/common";
+import { Controller, Get, Param, Body, Post, Query , ParseIntPipe,ParseBoolPipe, DefaultValuePipe, ValidationPipe, Patch, Delete } from "@nestjs/common";
 import { UserService } from "./users.service";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { GetUserParamDto } from "./dtos/get-user-param.dto";
@@ -23,4 +23,9 @@ getAllUsers(){
         this.userService.createUser(user);
      }
 
+@Delete(':id')
+public deleteUser(@Param('id', ParseIntPipe) id : number){
+   this.userService.deleteUser(id);
+
+}
 }

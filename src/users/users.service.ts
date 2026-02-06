@@ -4,6 +4,7 @@ import { User } from "./user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { Profile } from "src/profile/profile.entity";
+import { Likes } from "src/likes/likes.entity";
 @Injectable() // First step for Injectable
 export class UserService{
     // users: {id:number,name: String , email:String ,gender: string , isMarried: boolean}[] = [
@@ -17,13 +18,25 @@ export class UserService{
         private userRepository : Repository<User>,
 
         @InjectRepository(Profile)
-        private profileRepository : Repository<Profile>
+        private profileRepository : Repository<Profile>,
+
+        @InjectRepository(Likes)
+        private likesRepository : Repository<Likes>
     ){
 
     }
     getAllUsers(){
-        return this.userRepository.find()
+        return this.userRepository.find({
+            relations:{
+                profile: true
+            }
+        })
         // return this.users;
+    }
+
+
+    getAllLikes(){
+        return this.likesRepository.find()
     }
 
  
@@ -31,6 +44,8 @@ export class UserService{
     public async createUser(userDTO: CreateUserDTO){
        // Create a profile & save
       userDTO.profile =userDTO.profile ?? {};
+
+      userDTO.like = userDTO.like ?? {};
         
        let user = this.userRepository.create(userDTO);
      
@@ -38,5 +53,17 @@ export class UserService{
 
        // Save the  User Object
        return await this.userRepository.save(user);
+    }
+
+    public async deleteUser(id : number){
+    //find the user with given id
+// let user =  await this.userRepository.findOneBy({id});
+
+    //delteuser 
+ await this.userRepository.delete(id);
+    //delete the profile
+// await this.profileRepository.delete(user.profile.id);
+    //send the response
+    return {deleted: true}
     }
 }

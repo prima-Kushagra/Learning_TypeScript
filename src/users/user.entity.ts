@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn, OneToOne, JoinColumn} from "typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { Profile } from "src/profile/profile.entity";
+import { Likes } from "src/likes/likes.entity";
 
     @Entity()
     export class User{
@@ -30,11 +31,18 @@ import { Profile } from "src/profile/profile.entity";
     })
     password: string;
 
-    @OneToOne(() => Profile ,{
-        cascade: ['insert']   //to automate child table operartions
+    @OneToOne(() => Profile , (profile)=> profile.user,{
+        cascade: ['insert'],
+        // eager:true   //to automate child table operartions
     }) // to implement one to one relation
-    @JoinColumn()
     profile?: Profile;
+    
+    @OneToOne(() => Likes,{
+        cascade:true,
+        eager:true
+    })
+    @JoinColumn()
+    like?:Likes;
     
     @CreateDateColumn()
     createdAt : Date;
