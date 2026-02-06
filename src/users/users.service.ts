@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { Profile } from "src/profile/profile.entity";
 import { Likes } from "src/likes/likes.entity";
+import {  ConfigService } from "@nestjs/config";
 @Injectable() // First step for Injectable
 export class UserService{
     // users: {id:number,name: String , email:String ,gender: string , isMarried: boolean}[] = [
@@ -21,11 +22,14 @@ export class UserService{
         private profileRepository : Repository<Profile>,
 
         @InjectRepository(Likes)
-        private likesRepository : Repository<Likes>
+        private likesRepository : Repository<Likes>,
+
+        private readonly configService: ConfigService
     ){
 
     }
     getAllUsers(){
+        
         return this.userRepository.find({
             relations:{
                 profile: true

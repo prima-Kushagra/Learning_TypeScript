@@ -10,21 +10,30 @@ import { ProfileModule } from './profile/profile.module';
 import { LikesController } from './likes/likes.controller';
 import { LikesService } from './likes/likes.service';
 import { LikesModule } from './likes/likes.module';
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
-  imports: [UsersModule, TweetModule, AuthModule ,TypeOrmModule.forRootAsync({
-    imports:[],
-    inject: [],
-   useFactory: () => ({
+  imports: [
+    UsersModule, 
+    TweetModule, 
+    AuthModule ,
+    ConfigModule.forRoot({
+      isGlobal:true,
+      envFilePath: '.env'
+
+    }),
+    TypeOrmModule.forRootAsync({
+    imports:[ConfigModule],
+    inject: [ConfigService],
+   useFactory: (configService : ConfigService) => ({
      type: 'postgres',
     // entities: [User],
     autoLoadEntities:true,
     synchronize: true,
-    host : 'localhost',
-    port : 5432,
-    username : 'postgres',
-    password : 'Kushagr@123',
-    database : 'nestJS'
+    host : configService.get('DB_HOST'),
+    port : configService.get('DB_PORT'),
+    username : configService.get('DB_USERNAME'),
+    password : configService.get('DB_PASSWORD'),
+    database : configService.get('DB_NAME'),
    })
   }), ProfileModule, LikesModule],
   controllers: [AppController, LikesController],
