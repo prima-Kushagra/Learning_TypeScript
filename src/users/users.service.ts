@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
+import { Profile } from "src/profile/profile.entity";
 @Injectable() // First step for Injectable
 export class UserService{
     // users: {id:number,name: String , email:String ,gender: string , isMarried: boolean}[] = [
@@ -13,7 +14,10 @@ export class UserService{
     // ]
     constructor(
         @InjectRepository(User)
-        private userRepository : Repository<User>
+        private userRepository : Repository<User>,
+
+        @InjectRepository(Profile)
+        private profileRepository : Repository<Profile>
     ){
 
     }
@@ -25,19 +29,16 @@ export class UserService{
  
 
     public async createUser(userDTO: CreateUserDTO){
-        // this.users.push(user);
-        //validating the user using emial
-        const user = await this.userRepository.findOne({
-            where: {email: userDTO.email}
-        })
-        //handle the url
-        if(user){
-           return  `The ${user} with the given email already exsists!`
-        }
-
-        // create user 
-        let newUser =this.userRepository.create(userDTO);
-        newUser =  await this.userRepository.save(newUser);
-        return newUser;
+       // Create a profile & save
+       userDTO.profile =userDTO.profile ?? {};
+        let profile = this.profileRepository.create(userDTO.profile);
+        await this.profileRepository.save(profile);
+       //Create the User Object
+       let user = this.userRepository.create(userDTO);
+       this.profileRepository.save(profile);
+       //Set the profile
+     user.profile = profile;
+       // Save the  User Object
+       return await this.userRepository.save(user);
     }
 }

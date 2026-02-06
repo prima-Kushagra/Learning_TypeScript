@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn, OneToOne, JoinColumn} from "typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
+import { Profile } from "src/profile/profile.entity";
 
     @Entity()
     export class User{
@@ -28,6 +29,10 @@ import { CreateUserDTO } from "./dtos/create-user.dto";
     length: 20
     })
     password: string;
+
+    @OneToOne(() => Profile) // to implement one to one relation
+    @JoinColumn()
+    profile?: Profile;
     
     @CreateDateColumn()
     createdAt : Date;
