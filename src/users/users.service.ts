@@ -30,14 +30,12 @@ export class UserService{
 
     public async createUser(userDTO: CreateUserDTO){
        // Create a profile & save
-       userDTO.profile =userDTO.profile ?? {};
-        let profile = this.profileRepository.create(userDTO.profile);
-        await this.profileRepository.save(profile);
-       //Create the User Object
+      userDTO.profile =userDTO.profile ?? {};
+        
        let user = this.userRepository.create(userDTO);
-       this.profileRepository.save(profile);
+     
        //Set the profile
-     user.profile = profile;
+
        // Save the  User Object
        return await this.userRepository.save(user);
     }

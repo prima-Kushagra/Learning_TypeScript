@@ -30,7 +30,9 @@ import { Profile } from "src/profile/profile.entity";
     })
     password: string;
 
-    @OneToOne(() => Profile) // to implement one to one relation
+    @OneToOne(() => Profile ,{
+        cascade: ['insert']   //to automate child table operartions
+    }) // to implement one to one relation
     @JoinColumn()
     profile?: Profile;
     
