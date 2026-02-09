@@ -11,6 +11,8 @@ import { LikesController } from './likes/likes.controller';
 import { LikesService } from './likes/likes.service';
 import { LikesModule } from './likes/likes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HashtagController } from './hashtag/hashtag.controller';
+import { HashtagModule } from './hashtag/hashtag.module';
 @Module({
   imports: [
     UsersModule, 
@@ -35,8 +37,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     password : configService.get('DB_PASSWORD'),
     database : configService.get('DB_NAME'),
    })
-  }), ProfileModule, LikesModule],
-  controllers: [AppController, LikesController],
+  }), ProfileModule, LikesModule, HashtagModule],
+  controllers: [AppController, LikesController, HashtagController],
   providers: [AppService, LikesService],
 })
 export class AppModule {}
