@@ -70,4 +70,8 @@ export class UserService{
     //send the response
     return {deleted: true}
     }
+
+    public async FindUserByID(id:number ){
+        return await this.userRepository.findOneBy({id})
+    }
 }

@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn, OneToOne, JoinColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn , CreateDateColumn , DeleteDateColumn, OneToOne, JoinColumn, OneToMany} from "typeorm";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { Profile } from "src/profile/profile.entity";
 import { Likes } from "src/likes/likes.entity";
+import { Tweet } from "src/tweet/tweet.entity";
 
     @Entity()
     export class User{
@@ -43,6 +44,9 @@ import { Likes } from "src/likes/likes.entity";
     })
     @JoinColumn()
     like?:Likes;
+
+      @OneToMany(() => Tweet, (tweet) => tweet.user)
+      tweet: Tweet[];
     
     @CreateDateColumn()
     createdAt : Date;
