@@ -45,6 +45,6 @@ Bio: string;
 profileImage?: string
 
 @OneToOne(() => User , (user) => user.profile, {onDelete: 'CASCADE'} )
-@JoinColumn()
+
 user: User;
 }

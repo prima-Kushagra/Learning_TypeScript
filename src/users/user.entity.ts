@@ -36,6 +36,7 @@ import { Tweet } from "src/tweet/tweet.entity";
         cascade: ['insert'],
         // eager:true   //to automate child table operartions
     }) // to implement one to one relation
+    @JoinColumn()
     profile?: Profile;
     
     @OneToOne(() => Likes,{

@@ -17,11 +17,11 @@ getAllUsers(){
 }
 
 
-@Post()
+// @Post()
      
-        createUser(@Body() user: CreateUserDTO){
-        this.userService.createUser(user);
-     }
+//         createUser(@Body() user: CreateUserDTO){
+//         this.userService.createUser(user);
+//      }
 
 @Delete(':id')
 public deleteUser(@Param('id', ParseIntPipe) id : number){

@@ -13,6 +13,8 @@ import { LikesModule } from './likes/likes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HashtagController } from './hashtag/hashtag.controller';
 import { HashtagModule } from './hashtag/hashtag.module';
+import  appConfig  from './config/app.config';
+import databaseConfig from './config/database.config';
 @Module({
   imports: [
     UsersModule, 
@@ -20,7 +22,8 @@ import { HashtagModule } from './hashtag/hashtag.module';
     AuthModule ,
     ConfigModule.forRoot({
       isGlobal:true,
-      envFilePath: '.env'
+      envFilePath: '.env',
+      load : [appConfig,databaseConfig]
 
     }),
     TypeOrmModule.forRootAsync({
@@ -29,13 +32,13 @@ import { HashtagModule } from './hashtag/hashtag.module';
    useFactory: (configService : ConfigService) => ({
      type: 'postgres',
     // entities: [User],
-    autoLoadEntities:true,
-    synchronize: true,
-    host : configService.get('DB_HOST'),
-    port : configService.get('DB_PORT'),
-    username : configService.get('DB_USERNAME'),
-    password : configService.get('DB_PASSWORD'),
-    database : configService.get('DB_NAME'),
+    autoLoadEntities:configService.get('database.autoLoadEntities'),
+    synchronize: configService.get('database.syncronize'),
+    host : configService.get('database.host'),
+    port : configService.get('database.port'),
+    username : configService.get('database.username'),
+    password : configService.get('database.password'),
+    database : configService.get('database.name'),
    })
   }), ProfileModule, LikesModule, HashtagModule],
   controllers: [AppController, LikesController, HashtagController],
