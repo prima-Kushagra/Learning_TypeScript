@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, RequestTimeoutException, UnauthorizedException } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -93,5 +93,24 @@ export class UserService{
 
     public async FindUserByID(id:number ){
         return await this.userRepository.findOneBy({id})
+    }
+
+    public async findUserByUsername(username: string){
+        let user: User | null = null;
+
+        try {
+          user = await  this.userRepository.findOne({
+                where : {username},
+                select: ['id','username','password'],
+            });
+        } catch (error) {
+            throw new RequestTimeoutException(error , {
+                description: 'User with the given username could not be found'
+            })
+        }
+        if(!user){
+            throw new UnauthorizedException('User does not exsists!')
+        }
+        return user;
     }
 }
