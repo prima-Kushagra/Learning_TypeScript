@@ -7,10 +7,19 @@ import { CreateUserDTO } from 'src/users/dtos/create-user.dto';
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject(UserService)
+
+        @Inject(forwardRef(()=>UserService))
         private readonly userService : UserService,
         @Inject(authConfig.KEY)
         private readonly authConfiguration: ConfigType<typeof authConfig>){}
+
+        isAuthenticated: Boolean = false;
+
+        login(email: string , pswd: string){
+            console.log(this.authConfiguration);
+            console.log(this.authConfiguration.sharedSecret);
+            return 'User does not exsists'
+        }
    
 public async signup(createUserDto : CreateUserDTO){
    return await this.userService.createUser(createUserDto);

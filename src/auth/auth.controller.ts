@@ -10,4 +10,10 @@ export class AuthController {
      async signup(@Body() createUserDto : CreateUserDTO){
       return await this.authService.signup(createUserDto)
     }
+
+    //http://localhost:3000/auth/login
+    @Post()
+    login(@Body() user :{email:string , password:string}){
+        return this.authService.login(user.email,user.password);
+    }
 }

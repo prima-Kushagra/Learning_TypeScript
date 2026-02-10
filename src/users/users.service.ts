@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -6,6 +6,8 @@ import { CreateUserDTO } from "./dtos/create-user.dto";
 import { Profile } from "src/profile/profile.entity";
 import { Likes } from "src/likes/likes.entity";
 import {  ConfigService } from "@nestjs/config";
+import { UserAlreadyExistsException } from "src/exceptions/user-already-exsists-exception";
+import { HashingProvider } from "src/auth/provider/hashing.provider";
 @Injectable() // First step for Injectable
 export class UserService{
     // users: {id:number,name: String , email:String ,gender: string , isMarried: boolean}[] = [
@@ -24,7 +26,10 @@ export class UserService{
         @InjectRepository(Likes)
         private likesRepository : Repository<Likes>,
 
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+
+        @Inject(forwardRef(()=> HashingProvider))
+        private readonly hashingProvider : HashingProvider
     ){
 
     }
@@ -49,9 +54,24 @@ export class UserService{
        // Create a profile & save
       userDTO.profile =userDTO.profile ?? {};
 
-      userDTO.like = userDTO.like ?? {};
-        
-       let user = this.userRepository.create(userDTO);
+        const exsistingUserWithName = await this.userRepository.findOne({
+            where: {username: userDTO.username}
+        })
+
+        if(exsistingUserWithName){
+            throw new UserAlreadyExistsException('username', userDTO.username)
+        }
+
+        const exsistingUserWithEmail = await this.userRepository.findOne({
+             where: {email : userDTO.email}
+        })
+        if(exsistingUserWithEmail){
+            throw new UserAlreadyExistsException('email',userDTO.email);
+        }
+       let user = this.userRepository.create({
+        ...userDTO,
+        password: await this.hashingProvider.hashPassword(userDTO.password)
+    });
      
        //Set the profile
 

@@ -15,7 +15,7 @@ export class CreateUserDTO{
    
    @IsNotEmpty()
    @MinLength(8,{message: 'Password should be greater then 8 characters'})
-   @MaxLength(20)
+   @MaxLength(200)
    password: string;
    
    @IsOptional()

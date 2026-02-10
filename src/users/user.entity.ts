@@ -28,7 +28,7 @@ import { Tweet } from "src/tweet/tweet.entity";
     @Column({
     type: 'varchar',
     nullable: false,
-    length: 20
+    length: 200
     })
     password: string;
 
