@@ -15,6 +15,10 @@ import { HashtagController } from './hashtag/hashtag.controller';
 import { HashtagModule } from './hashtag/hashtag.module';
 import  appConfig  from './config/app.config';
 import databaseConfig from './config/database.config';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthorizeGuard } from './auth/guards/authorize.guard';
+import authConfig from './auth/config/auth.config';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     UsersModule, 
@@ -25,7 +29,8 @@ import databaseConfig from './config/database.config';
       envFilePath: '.env',
       load : [appConfig,databaseConfig]
 
-    }),
+    }),ConfigModule.forFeature(authConfig),
+    JwtModule.registerAsync(authConfig.asProvider()),
     TypeOrmModule.forRootAsync({
     imports:[ConfigModule],
     inject: [ConfigService],
@@ -42,6 +47,8 @@ import databaseConfig from './config/database.config';
    })
   }), ProfileModule, LikesModule, HashtagModule],
   controllers: [AppController, LikesController, HashtagController],
-  providers: [AppService, LikesService],
+  providers: [AppService, LikesService,{
+          provide :  APP_GUARD,
+          useClass : AuthorizeGuard}],
 })
 export class AppModule {}

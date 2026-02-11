@@ -4,15 +4,28 @@ import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import authConfig from "../config/auth.config";
 import type { ConfigType } from "@nestjs/config";
+import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export class AuthorizeGuard implements CanActivate{
     constructor(
         private readonly jwtService : JwtService,
         @Inject(authConfig.KEY)
-        private readonly authConfiguration : ConfigType<typeof authConfig>
+        private readonly authConfiguration : ConfigType<typeof authConfig>,
+
+        private readonly reflector : Reflector
     ){}
    async canActivate(context: ExecutionContext):  Promise<boolean>  {
+  // is public mertadata 
+  const isPublic = this.reflector.getAllAndOverride('isPublic', [
+    context.getHandler(),
+    context.getClass()
+  ])
+  if(isPublic){
+    return true;
+  }
+
+
         //1. extract request from execution context
     const request : Request = context.switchToHttp().getRequest();
         //2. Extract token from the request header

@@ -1,14 +1,11 @@
 import { Controller, Get, Param, Body, Post, Query , ParseIntPipe,ParseBoolPipe, DefaultValuePipe, ValidationPipe, Patch, Delete, UseGuards } from "@nestjs/common";
 import { UserService } from "./users.service";
-import { CreateUserDTO } from "./dtos/create-user.dto";
-import { GetUserParamDto } from "./dtos/get-user-param.dto";
-import { UpdateUserDTO } from "./dtos/update-user.dto";
-import { AuthorizeGuard } from "src/auth/guards/authorize.guard";
+
 
 // http://localhost:3000/users/101
 
 @Controller('users')
-@UseGuards(AuthorizeGuard)
+// @UseGuards(AuthorizeGuard)
 export class UsersControllers{
    constructor(private  userService: UserService)  {} // 3rd step for injectable
 
