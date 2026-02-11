@@ -5,6 +5,7 @@ import authConfig from './config/auth.config'
 import { CreateUserDTO } from 'src/users/dtos/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { HashingProvider } from './provider/hashing.provider';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
         @Inject(authConfig.KEY)
         private readonly authConfiguration: ConfigType<typeof authConfig>,
     
-        private readonly hashinProvider : HashingProvider){}
+        private readonly hashinProvider : HashingProvider,
+    private readonly jwtService : JwtService){}
 
         isAuthenticated: Boolean = false;
 
@@ -34,11 +36,18 @@ export class AuthService {
             //3. The password Match
 
             //4. send the response
+            const token = await this.jwtService.signAsync({
+                sub: user.id,
+                email: user.email
+            },{
+               secret : this.authConfiguration.secret,
+               expiresIn : this.authConfiguration.expiresIn,
+               audience : this.authConfiguration.audience,
+               issuer : this.authConfiguration.issuer
+            });
             return {
-                data:user,
-                success:true,
-                message : 'User logged in successfully'
-            };
+                token : token
+            }
         }
    
 public async signup(createUserDto : CreateUserDTO){
